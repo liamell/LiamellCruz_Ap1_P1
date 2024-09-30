@@ -1,5 +1,6 @@
 using LiamellCruz_Ap1_P1.Components;
 using LiamellCruz_Ap1_P1.DAL;
+using LiamellCruz_Ap1_P1.Service;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,9 @@ builder.Services.AddRazorComponents()
 
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
+
+builder.Services.AddScoped<PrestamoService>();
+
 
 
 var app = builder.Build();
