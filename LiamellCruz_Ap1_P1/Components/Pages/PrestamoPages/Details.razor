@@ -1,0 +1,53 @@
+﻿@page "/Prestamos/Details/{PrestamoId:int}"
+@using LiamellCruz_Ap1_P1.Models
+@using LiamellCruz_Ap1_P1.Service
+@inject PrestamoService prestamoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Details</PageTitle>
+<div class="container">
+	<div class="shadow-lg">
+		@*Header*@
+		<div class="card-header text-center">
+			<h3><strong>Datos del Deudor</strong></h3>
+		</div>
+		@*Body*@
+		<div class="card-body">
+			<ul class="mt-5">
+				<li><strong>PrestamoId: </strong>@Prestamos.PrestamoId</li>
+				<li><strong>Deudor:  </strong>@Prestamos.Deudor</li>
+				<li><strong>Concepto:  </strong>@Prestamos.Concepto</li>
+				<li><strong>Monto: </strong>@Prestamos.Monto</li>
+			</ul>
+		</div>
+		@*Footer*@
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+@code {
+
+	[Parameter]
+	public int PrestamoId { get; set; }
+
+	public Prestamos Prestamos { get; set; } = new Prestamos();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Prestamos = await prestamoService.Buscar(PrestamoId);
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Prestamos/Index");
+	}
+
+
+}
