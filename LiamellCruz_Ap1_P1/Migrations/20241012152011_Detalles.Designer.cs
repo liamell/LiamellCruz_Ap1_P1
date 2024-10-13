@@ -3,6 +3,7 @@ using System;
 using LiamellCruz_Ap1_P1.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiamellCruz_Ap1_P1.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20241012152011_Detalles")]
+    partial class Detalles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -76,23 +79,6 @@ namespace LiamellCruz_Ap1_P1.Migrations
                     b.HasKey("DeudorId");
 
                     b.ToTable("Deudor");
-
-                    b.HasData(
-                        new
-                        {
-                            DeudorId = 1,
-                            Nombres = "liamell Cruz"
-                        },
-                        new
-                        {
-                            DeudorId = 2,
-                            Nombres = "Marcos Rosario"
-                        },
-                        new
-                        {
-                            DeudorId = 3,
-                            Nombres = "Josmeyli Duarte"
-                        });
                 });
 
             modelBuilder.Entity("LiamellCruz_Ap1_P1.Models.Prestamos", b =>
@@ -105,15 +91,14 @@ namespace LiamellCruz_Ap1_P1.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DeudorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Deudor")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Monto")
                         .HasColumnType("REAL");
 
                     b.HasKey("PrestamoId");
-
-                    b.HasIndex("DeudorId");
 
                     b.ToTable("Prestamo");
                 });
@@ -146,17 +131,6 @@ namespace LiamellCruz_Ap1_P1.Migrations
                     b.Navigation("Cobro");
 
                     b.Navigation("Prestamo");
-                });
-
-            modelBuilder.Entity("LiamellCruz_Ap1_P1.Models.Prestamos", b =>
-                {
-                    b.HasOne("LiamellCruz_Ap1_P1.Models.Deudor", "Deudor")
-                        .WithMany()
-                        .HasForeignKey("DeudorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Deudor");
                 });
 
             modelBuilder.Entity("LiamellCruz_Ap1_P1.Models.Cobros", b =>

@@ -9,10 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
+
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
 
 builder.Services.AddScoped<PrestamoService>();
+builder.Services.AddScoped<CobroService>();
+builder.Services.AddScoped<DeudorService>();
+builder.Services.AddScoped<DetallesCobroService>();
+
+builder.Services.AddBlazorBootstrap();
 
 
 

@@ -1,109 +1,99 @@
 ﻿@page "/Prestamos/Edit/{PrestamoId:int}"
 @using LiamellCruz_Ap1_P1.Models
 @using LiamellCruz_Ap1_P1.Service
+@inject DeudorService deudorService
 @inject PrestamoService prestamoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-
-
 <PageTitle>Modificar Prestamos</PageTitle>
 <EditForm Model="Prestamos" OnValidSubmit="Modificar">
-	<DataAnnotationsValidator />
-	@*Formulario*@
-	<div class="container">
-		<div class="shadow-lg">
-			@*Header*@
-			<div class="card-header text-center">
-				<h3><strong>Editar Prestamos</strong></h3>
+    <DataAnnotationsValidator />
 
-			</div>
-			@*Body*@
-			<div class="card-body">
-				<div class="row">
-					@*PrestamoiD*@
-					<div class="col-1">
-						<label class="form-label"><strong>PrestamoId</strong></label>
-						<InputNumber class="form-control" @bind-Value="Prestamos.PrestamoId" readonly></InputNumber>
-					</div>
+    @* Formulario *@
+    <div class="container">
+        <div class="shadow-lg">
+            @* Header *@
+            <div class="card-header text-center">
+                <h3><strong>Editar Prestamos</strong></h3>
+            </div>
 
-					@*Deudor*@
-					<div class="col-3 ms-5">
-						<label class="form-label"><strong>Deudor</strong></label>
-						<InputText class="form-control" @bind-Value="Prestamos.Deudor"></InputText>
-						<ValidationMessage For="(()=> Prestamos.Deudor)" />
+            @* Body *@
+            <div class="card-body">
+                <div class="row">
+                    @* PrestamoId *@
+                    <div class="col-1">
+                        <label class="form-label"><strong>PrestamoId</strong></label>
+                        <InputNumber class="form-control" @bind-Value="Prestamos.PrestamoId" readonly></InputNumber>
+                    </div>
 
+                    @* Deudor (Seleccionar desde lista) *@
+                    <div class="col-3 ms-5">
+                        <label class="form-label"><strong>Deudor</strong></label>
+                        <InputSelect class="form-control" @bind-Value="Prestamos.DeudorId">
+                            <option value="">Seleccione un deudor</option>
+                            @foreach (var deudor in ListaDeudores)
+                            {
+                                <option value="@deudor.DeudorId">@deudor.Nombres</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="(() => Prestamos.DeudorId)" />
+                    </div>
 
-					</div>
+                    @* Concepto *@
+                    <div class="col-3 ms-5">
+                        <label class="form-label"><strong>Concepto</strong></label>
+                        <InputText class="form-control" @bind-Value="Prestamos.Concepto"></InputText>
+                        <ValidationMessage For="(() => Prestamos.Concepto)" />
+                    </div>
 
-					@*Concepto*@
-					<div class="col-3 ms-5">
-						<label class="form-label"><strong>Concepto</strong></label>
-						<InputText class="form-control" @bind-Value="Prestamos.Concepto"></InputText>
-						<ValidationMessage For="(()=> Prestamos.Concepto)" />
+                    @* Monto *@
+                    <div class="col-3 ms-5">
+                        <label class="form-label"><strong>Monto</strong></label>
+                        <InputNumber class="form-control" @bind-Value="Prestamos.Monto"></InputNumber>
+                        <ValidationMessage For="(() => Prestamos.Monto)" />
+                    </div>
+                </div>
+            </div>
 
-
-					</div>
-
-					@*Monto*@
-					<div class="col-3 ms-5">
-						<label class="form-label"><strong>Monto</strong></label>
-						<InputNumber class="form-control" @bind-Value="Prestamos.Monto"></InputNumber>
-						<ValidationMessage For="(()=> Prestamos.Monto)" />
-
-
-					</div>
-
-
-
-				</div>
-				@*Footer*@
-				<div class="card-footer text-center">
-					<button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
-					<button Type="button" Class="btn btn-danger" @onclick="Modificar">Modificar</button>
-				</div>
-
-
-			</div>
-
-
-		</div>
-
-
-
-	</div>
+            @* Footer *@
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-danger">Modificar</button>
+            </div>
+        </div>
+    </div>
 </EditForm>
 
-
 @code {
-	[Parameter]
-	public int PrestamoId { get; set; }
-	public Prestamos Prestamos { get; set; } = new Prestamos();
-	public string Mensaje { get; set; } = string.Empty;
+    [Parameter]
+    public int PrestamoId { get; set; }
+    public Prestamos Prestamos { get; set; } = new Prestamos();
+    public List<Deudor> ListaDeudores { get; set; } = new List<Deudor>();
+    public string Mensaje { get; set; } = string.Empty;
 
-	protected override async Task OnInitializedAsync()
-	{
-		Prestamos = await prestamoService.Buscar(PrestamoId);
+    protected override async Task OnInitializedAsync()
+    {
+        
+        Prestamos = await prestamoService.Buscar(PrestamoId);
 
-	}
+        
+        ListaDeudores = await deudorService.Listar(d => d.DeudorId > 0);
+    }
 
-	public async Task Modificar()
-	{
+    public async Task Modificar()
+    {
+        var modificado = await prestamoService.Guardar(Prestamos);
 
-		var Modificar = await prestamoService.Guardar(Prestamos);
+        if (modificado)
+            Mensaje = "Se ha modificado correctamente el Prestamo";
+        else
+            Mensaje = "No se ha modificado correctamente";
+    }
 
-		if (Modificar)
-			Mensaje = "Se ha modificado correctamente el Prestamo";
-
-		else
-			Mensaje = "No se ha Modificado correctamente";
-	}
-
-
-	public void Volver()
-	{
-		navigationManager.NavigateTo("/Prestamos/Index");
-	}
-
-
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Prestamos/Index");
+    }
 }
+

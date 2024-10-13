@@ -1,9 +1,10 @@
-﻿@page "/Prestamos/Index"
+﻿@page "/Prestamos/Cobro/Index"
 @using LiamellCruz_Ap1_P1.Models
 @using LiamellCruz_Ap1_P1.Service
-@inject PrestamoService prestamoService
+@inject CobroService cobroService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+
 
 @*HTML*@
 
@@ -12,7 +13,7 @@
     <div class="card-shadow-lg">
         @*Header*@
         <div class="card-header text-center">
-            <h3><strong>Listado de Prestamos</strong></h3>
+            <h3><strong>Cobros</strong></h3>
         </div>
         @*Body*@
         <div class="card-body">
@@ -33,9 +34,9 @@
                 <div class="col-3">
                     <InputSelect class="form-select" @bind-Value="Filtro">
                         <option value="" selected disabled>Elija una opci&oacute;n</option>
-                        <option value="PrestamoId">PrestamoId</option>
+                        <option value="CobroId">CobroId</option>
+                        <option value="Fecha">Fecha</option>
                         <option value="Deudor">Deudor</option>
-                        <option value="Concepto">Concepto</option>
                         <option value="Monto">Monto</option>
                     </InputSelect>
                 </div>
@@ -58,9 +59,9 @@
             <table class="table table-bordered text-center mt-4">
                 <thead>
                     <tr>
-                        <th>PrestamoId</th>
+                        <th>CobroId</th>
+                        <th>Fecha</th>
                         <th>Deudor</th>
-                        <th>Concepto</th>
                         <th>Monto</th>
                         <th>Observar</th>
                         <th>Editar</th>
@@ -68,27 +69,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var prestamo in ListaPrestamos)
+                    @foreach (var cobro in ListaCobros)
                     {
                         <tr>
-                            <td>@prestamo.PrestamoId</td>
-                            <td>@prestamo.Deudor?.Nombres </td>
-                            <td>@prestamo.Concepto</td>
-                            <td>@prestamo.Monto</td>
+                            <td>@cobro.CobroId</td>
+                            <td>@cobro.Fecha</td>
+                            <td>@cobro.Deudor?.Nombres</td>
+                            <td>@cobro.Monto</td>
                             @*Pantalla Observar*@
                             <td>
                                 <button type="button" class="btn btn-outline-primary bi bi-eye"
-                                        @onclick="()=> Observar(prestamo.PrestamoId)"></button>
+                                        @onclick="()=> Observar(cobro.CobroId)"></button>
                             </td>
                             @*Pantalla Editar*@
                             <td>
                                 <button type="button" class="btn btn-outline-warning bi bi-pencil"
-                                        @onclick="()=> Editar(prestamo.PrestamoId)"></button>
+                                        @onclick="()=> Editar(cobro.CobroId)"></button>
                             </td>
                             @*Pantalla Eliminar*@
                             <td>
                                 <button type="button" class="btn btn-outline-danger bi bi-trash3"
-                                        @onclick="()=> Eliminar(prestamo.PrestamoId)"></button>
+                                        @onclick="()=> Eliminar(cobro.CobroId)"></button>
                             </td>
                         </tr>
                     }
@@ -96,63 +97,65 @@
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 </div>
 
 
 
 
+
 @code {
 
-    public List<Prestamos> ListaPrestamos { get; set; } = new List<Prestamos>();
+    public List<Cobros> ListaCobros { get; set; } = new List<Cobros>();
+
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaPrestamos = await prestamoService.Listar(p => p.PrestamoId > 0);
+        ListaCobros = await cobroService.Listar(c => c.CobroId > 0);
     }
 
     private async Task Buscar()
     {
         if (ValorFiltro.Trim() != "")
         {
-            if (Filtro == "PrestamoId" && int.TryParse(ValorFiltro, out int prestamoId))
-                ListaPrestamos = await prestamoService.Listar(p => p.PrestamoId == prestamoId);
-            else if (Filtro == "Deudor")
-                ListaPrestamos = await prestamoService.Listar(p => p.Deudor.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
-
+            if (Filtro == "Deudor")
+            {
+                ListaCobros = await cobroService.Listar(p => p.Deudor.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
+            }
         }
         else
-            ListaPrestamos = await prestamoService.Listar(p => p.PrestamoId > 0);
+            ListaCobros = await cobroService.Listar(p => p.CobroId > 0);
     }
-
     private async Task Restablecer()
     {
-        ListaPrestamos = await prestamoService.Listar(p=> p.PrestamoId > 0);
+        ListaCobros = await cobroService.Listar(e => e.CobroId > 0);
         Filtro = string.Empty;
         ValorFiltro = string.Empty;
     }
 
     public void Crear()
     {
-        navigationManager.NavigateTo("/Prestamos/Create");
+        navigationManager.NavigateTo("/Prestamos/Cobro/Create");
     }
 
     public void Observar(int id)
     {
-        navigationManager.NavigateTo($"Prestamos/Details/{id}");
+        navigationManager.NavigateTo($"/Prestamos/Cobro/Details/{id}");
     }
 
     public void Editar(int id)
     {
-        navigationManager.NavigateTo($"/Prestamos/Edit/{id}");
+        navigationManager.NavigateTo($"/Prestamos/Cobro/Edit/{id}");
     }
 
     public void Eliminar(int id)
     {
-        navigationManager.NavigateTo($"/Prestamos/Delete/{id}");
+        navigationManager.NavigateTo($"/Prestamos/Cobro/Delete/{id}");
     }
+
+
 
 }
