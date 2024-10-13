@@ -76,17 +76,17 @@
                             <td>@cobro.Fecha</td>
                             <td>@cobro.Deudor?.Nombres</td>
                             <td>@cobro.Monto</td>
-                            @*Pantalla Observar*@
+                            @*Observar*@
                             <td>
                                 <button type="button" class="btn btn-outline-primary bi bi-eye"
                                         @onclick="()=> Observar(cobro.CobroId)"></button>
                             </td>
-                            @*Pantalla Editar*@
+                            @*Editar*@
                             <td>
                                 <button type="button" class="btn btn-outline-warning bi bi-pencil"
                                         @onclick="()=> Editar(cobro.CobroId)"></button>
                             </td>
-                            @*Pantalla Eliminar*@
+                            @*Eliminar*@
                             <td>
                                 <button type="button" class="btn btn-outline-danger bi bi-trash3"
                                         @onclick="()=> Eliminar(cobro.CobroId)"></button>
