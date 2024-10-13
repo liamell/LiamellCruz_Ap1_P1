@@ -7,6 +7,7 @@ namespace LiamellCruz_Ap1_P1.Service;
 
 public class CobroService(Contexto contexto)
 {
+    
     private async Task<bool> Existe(int cobroId)
     {
         return await contexto.Cobro
