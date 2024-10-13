@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace LiamellCruz_Ap1_P1.Service;
 
+
 public class DetallesCobroService(Contexto contexto)
 {
     public async Task<List<Prestamos>> Listar(Expression<Func<Prestamos, bool>> criterio)
