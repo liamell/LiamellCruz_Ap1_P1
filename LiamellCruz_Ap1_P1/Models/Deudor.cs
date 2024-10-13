@@ -9,7 +9,7 @@ public class Deudor
 
     [Required(ErrorMessage = "Campo obligatorio")]
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Solo se permiten letras")]
-    public string? Nombres { get; set; }
+    public string Nombres { get; set; }
 
     
 }
