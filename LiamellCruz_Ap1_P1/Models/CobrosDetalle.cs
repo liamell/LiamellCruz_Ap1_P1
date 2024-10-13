@@ -6,6 +6,8 @@ namespace LiamellCruz_Ap1_P1.Models;
 public class CobrosDetalle
 {
     [Key]
+
+    
     public int DetalleId { get; set; }
 
     [ForeignKey("CobroId")]
