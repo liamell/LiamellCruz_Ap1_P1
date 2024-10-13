@@ -11,6 +11,6 @@ public class Deudor
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Solo se permiten letras")]
     public string? Nombres { get; set; }
 
-
+    
 }
 
