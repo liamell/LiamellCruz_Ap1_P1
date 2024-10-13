@@ -6,6 +6,8 @@ namespace LiamellCruz_Ap1_P1.Models;
 public class Cobros
 {
     [Key]
+
+    
     public int CobroId { get; set; }
 
     [Required(ErrorMessage = "Campo obligatorio")]
