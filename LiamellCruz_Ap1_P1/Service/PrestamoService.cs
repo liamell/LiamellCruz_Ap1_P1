@@ -65,14 +65,7 @@ public class PrestamoService(Contexto contexto)
             .Where(filtro)
             .ToListAsync();
     }
-    //public async Task<List<Prestamos>> Listar(Expression<Func<Prestamos, bool>> criterio)
-    //{
-       // return await contexto.Prestamo
-         //   .AsNoTracking()
-           // .Where(criterio)
-            //.ToListAsync();
-
-    //}
+  
 
 
 }
