@@ -45,7 +45,7 @@
                     <p>Deudor seleccionado: @Cobro.DeudorId</p>
                 </div>
 
-                @* Monto *@
+                @*Monto*@
                 <div class="col-6 ms-3">
                     <label class="form-label"><strong>Monto</strong></label>
                     <InputSelect class="form-control" @bind-Value="Cobro.Monto">
@@ -58,11 +58,11 @@
                     <ValidationMessage For="(() => Cobro.Monto)" />
                 </div>
 
-                @* Detalles del Cobro *@
+                @* DetallesdelCobro *@
                 <div class="border border-success p-3 mt-3">
                     <h5>Detalles del Cobro</h5>
 
-                    @* Id prestamo *@
+                    @* Idprestamo *@
                     <div class="row">
                         <div class="col-4">
                             <label class="form-label"><strong>Préstamo ID</strong></label>
@@ -75,7 +75,7 @@
                                 }
                             </InputSelect>
                         </div>
-                        @* Valor Cobrado *@
+                        @* ValorCobrado *@
                         <div class="col-4">
                             <label class="form-label"><strong>Valor Cobrado</strong></label>
                             <InputNumber class="form-control" @bind-Value="nuevoDetalle.ValorCobrado"></InputNumber>
