@@ -6,6 +6,7 @@ namespace LiamellCruz_Ap1_P1.Models;
 public class Prestamos
 {
     [Key]
+    
     public int PrestamoId { get; set; }
 
     [Required(ErrorMessage =" Campo obligatorio")]
