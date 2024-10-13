@@ -39,11 +39,7 @@
 						<label class="form-label"><strong>Monto</strong></label>
 						<InputNumber class="form-control" @bind-Value="Cobros.Monto"></InputNumber>
 						<ValidationMessage For="(()=> Cobros.Monto)" />
-
-
 					</div>
-
-
 
 				</div>
 				@*Footer*@
@@ -86,7 +82,7 @@
 		var Modificar = await cobroService.Guardar(Cobros);
 
 		if (Modificar)
-			Mensaje = "Se ha modificado correctamente";
+			Mensaje = "Se ha modificado el cobro correctamente";
 
 		else
 			Mensaje = "No se ha Modificado correctamente";
