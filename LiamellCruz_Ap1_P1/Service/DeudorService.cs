@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace LiamellCruz_Ap1_P1.Service;
 
+
 public class DeudorService(Contexto contexto)
 {
     public async Task<List<Deudor>> Listar(Expression<Func<Deudor, bool>> criterio)
