@@ -1,50 +1,63 @@
 ﻿@page "/Prestamos/Create"
 @using LiamellCruz_Ap1_P1.Models
 @using LiamellCruz_Ap1_P1.Service
+@inject DeudorService deudorService
 @inject PrestamoService prestamoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+
 <PageTitle>Create</PageTitle>
 <EditForm Model="Prestamos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    @*Formulario*@
+
+    @* Formulario *@
     <div class="container">
         <div class="shadow-lg">
-            @*Header*@
+            @* Header *@
             <div class="card-header text-center">
                 <h3><strong>Crear Prestamo</strong></h3>
             </div>
-            @*Body*@
+
+            @* Body *@
             <div class="card-body">
                 <div class="row">
-                    @*Id*@
+                    @* Id *@
                     <div class="col-1">
                         <label class="form-label"><strong>PrestamoId</strong></label>
                         <InputNumber class="form-control" @bind-Value="Prestamos.PrestamoId" readonly></InputNumber>
                     </div>
-                    @*Nombre*@
+
+                    @* Deudor (Seleccionar) *@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Deudor</strong></label>
-                        <InputText class="form-control" @bind-Value="Prestamos.Deudor"></InputText>
-                        <ValidationMessage For="(()=> Prestamos.Deudor)" />
+                        <InputSelect class="form-control" @bind-Value="Prestamos.DeudorId">
+                            <option value="">Seleccione un deudor</option>
+                            @foreach (var deudor in ListaDeudores)
+                            {
+                                <option value="@deudor.DeudorId">@deudor.Nombres</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="(() => Prestamos.DeudorId)" />
                     </div>
-                    @*Concepto*@
+
+                    @* Concepto *@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Concepto</strong></label>
                         <InputText class="form-control" @bind-Value="Prestamos.Concepto"></InputText>
-                        <ValidationMessage For="(()=> Prestamos.Deudor)" />
+                        <ValidationMessage For="(() => Prestamos.Concepto)" />
                     </div>
-                    @*Sueldo*@
+
+                    @* Monto *@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Monto</strong></label>
                         <InputNumber class="form-control" @bind-Value="Prestamos.Monto"></InputNumber>
-
+                        <ValidationMessage For="(() => Prestamos.Monto)" />
                     </div>
-
                 </div>
             </div>
-            @*Footer*@
+
+            @* Footer *@
             <div class="card-footer text-center">
                 <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -55,24 +68,27 @@
 
 @code {
     public Prestamos Prestamos { get; set; } = new Prestamos();
-    public string Mensaje { get; set; } = string.Empty;
+    public List<Deudor> ListaDeudores { get; set; } = new List<Deudor>();
 
-    public async Task Guardar()
+    protected override async Task OnInitializedAsync()
     {
-       
-        var crear = await prestamoService.Guardar(Prestamos);
-
-        if (crear)
-            Mensaje = "Se ha creado correctamente el prestamo";
-        else
-            Mensaje = "No se ha creado correctamente";
+        ListaDeudores = await deudorService.Listar(d => d.DeudorId > 0); 
     }
 
+    private async Task Guardar()
+    {
+        var creado = await prestamoService.Guardar(Prestamos);
 
-    public void Volver()
+        if (creado)
+        {
+            navigationManager.NavigateTo("/Prestamos/Index");
+        }
+        
+        
+    }
+
+    private void Volver()
     {
         navigationManager.NavigateTo("/Prestamos/Index");
     }
-
-
 }

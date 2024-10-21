@@ -52,14 +52,20 @@ public class PrestamoService(Contexto contexto)
             .FirstOrDefaultAsync(p => p.PrestamoId == prestamoId);
     }
 
-    public async Task<List<Prestamos>> Listar(Expression<Func<Prestamos, bool>> criterio)
+    public async Task<Prestamos?> BuscarPrestamo(int id)
+    {
+        return await contexto.Prestamo.Include(p => p.Deudor).FirstOrDefaultAsync(p => p.DeudorId == id);
+    }
+
+
+    public async Task<List<Prestamos>> Listar(Expression<Func<Prestamos, bool>> filtro)
     {
         return await contexto.Prestamo
-            .AsNoTracking()
-            .Where(criterio)
+            .Include(p => p.Deudor)
+            .Where(filtro)
             .ToListAsync();
-
     }
+  
 
 
 }
